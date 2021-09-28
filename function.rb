@@ -27,7 +27,8 @@ def main(event:, context:)
       authtype = event['headers'][val]
     end
   end
-
+  puts authtype
+  puts contentType
   if event['httpMethod'] == 'POST' and event['path'] == '/token'
     if contentType != 'application/json'
       response(body: nil, status: 415)
