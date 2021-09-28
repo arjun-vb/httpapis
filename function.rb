@@ -4,6 +4,15 @@ require 'json'
 require 'jwt'
 require 'pp'
 
+def isJson(value)
+  begin
+    JSON.parse(value)
+  rescue
+    return false
+  end
+  return true
+end
+
 def main(event:, context:)
   # You shouldn't need to use context, but its fields are explained here:
   # https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
