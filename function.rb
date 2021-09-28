@@ -18,8 +18,18 @@ def main(event:, context:)
   # You shouldn't need to use context, but its fields are explained here:
   # https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
 
+  #puts event['headers']
+  headers = event['headers'].keys
+  for val in headers
+    if val.downcase == 'content-type'
+      contentType = event['headers'][val]
+    elsif val.downcase == 'authorization'
+      authtype = event['headers'][val]
+    end
+  end
+
   if event['httpMethod'] == 'POST' and event['path'] == '/token'
-    if event['headers']['Content-Type'] != 'application/json'
+    if contentType != 'application/json'
       response(body: nil, status: 415)
     elsif isJson(event['body'])
       payload = {
@@ -33,8 +43,8 @@ def main(event:, context:)
       response(body: nil, status: 422)
     end
   elsif event['httpMethod'] == 'GET' and event['path'] == '/'
-    auth = event['headers']['Authorization']
-    autharray = auth.split()
+    #auth = event['headers']['Authorization']
+    autharray = authtype.split()
     if autharray[0] == 'Bearer' and autharray[1].length > 0
       begin
         decodeToken = JWT.decode autharray[1], ENV['JWT_SECRET'], 'HS256'
