@@ -45,9 +45,9 @@ def main(event:, context:)
     end
   elsif event['httpMethod'] == 'GET' and event['path'] == '/'
     #auth = event['headers']['Authorization']
-    if authtype.length > 0
+    if authtype != nil and authtype.length > 0
       autharray = authtype.split()
-      if autharray.length() == 2 and autharray[0] == 'Bearer' and autharray[1].length > 0
+      if autharray.length() == 2 and autharray[0] == 'Bearer' and autharray[1] != nil and autharray[1].length > 0
         begin
           decodeToken = JWT.decode autharray[1], ENV['JWT_SECRET'], 'HS256'
           response(body: decodeToken[0]['data'], status: 200)
