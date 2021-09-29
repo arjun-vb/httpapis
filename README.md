@@ -1,4 +1,4 @@
-# HTTP APIs
+# JWT Ruby
 
 ## Clone
 
