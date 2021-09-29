@@ -27,8 +27,6 @@ def main(event:, context:)
       authtype = event['headers'][val]
     end
   end
-  puts authtype
-  puts contentType
   if event['httpMethod'] == 'POST' and event['path'] == '/token'
     if contentType != 'application/json'
       response(body: nil, status: 415)
@@ -50,8 +48,8 @@ def main(event:, context:)
       if autharray.length() == 2 and autharray[0] == 'Bearer' and autharray[1] != nil and autharray[1].length > 0
         begin
           decodeToken = JWT.decode autharray[1], ENV['JWT_SECRET'], 'HS256'
-          respBody = decodeToken[0]['data']
-          response(body: respBody, status: 200)
+          #respBody = JSON.parse(decodeToken[0]['data'])
+          response(body: JSON.parse(decodeToken[0]['data']), status: 200)
         rescue JWT::ExpiredSignature, JWT::ImmatureSignature
           response(body: nil, status: 401)
         rescue JWT::DecodeError, JWT::VerificationError
